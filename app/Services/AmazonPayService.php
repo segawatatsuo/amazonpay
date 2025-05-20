@@ -1,0 +1,74 @@
+<?php
+
+namespace App\Services;
+
+use Illuminate\Support\Facades\Http;
+
+class AmazonPayService
+{
+    protected $publicKeyId;
+    protected $merchantId;
+    protected $storeId;
+    protected $privateKey;
+    protected $region;
+    protected $sandbox;
+    protected $host;
+    protected $endpoint;
+
+    public function __construct()
+    {
+        $this->publicKeyId  = config('amazonpay.public_key_id');
+        $this->merchantId   = config('amazonpay.merchant_id');
+        $this->storeId      = config('amazonpay.store_id');
+        $this->region       = config('amazonpay.region', 'jp');
+        $this->sandbox      = config('amazonpay.sandbox', true);
+        $this->host         = 'pay-api.amazon.' . $this->region;
+        $this->endpoint     = $this->sandbox
+            ? 'https://pay-api.amazon.' . $this->region . '/sandbox/checkoutSessions'
+            : 'https://pay-api.amazon.' . $this->region . '/checkoutSessions';
+
+        $keyPath = base_path(config('amazonpay.private_key_path'));
+        $this->privateKey = file_get_contents($keyPath);
+    }
+
+    public function createCheckoutSession(array $payload)
+    {
+        $method = 'POST';
+        $uriPath = $this->sandbox ? '/sandbox/checkoutSessions' : '/checkoutSessions';
+        $timestamp = gmdate('Ymd\THis\Z');
+
+        $payloadJson = json_encode($payload, JSON_UNESCAPED_SLASHES);
+        $stringToSign = implode("\n", [
+            $method,
+            $uriPath,
+            $this->host,
+            $timestamp,
+            $payloadJson
+        ]);
+
+        // 署名を作成
+        openssl_sign(
+            $stringToSign,
+            $signature,
+            $this->privateKey,
+            OPENSSL_ALGO_SHA256
+        );
+        $signatureBase64 = base64_encode($signature);
+
+        $authorizationHeader = sprintf(
+            'AMZN-PAY-RSASSA-PSS PublicKeyId=%s, SignedHeaders=host;x-amz-pay-date, Signature=%s',
+            $this->publicKeyId,
+            $signatureBase64
+        );
+
+        // API リクエスト送信
+        $response = Http::withHeaders([
+            'content-type'     => 'application/json',
+            'x-amz-pay-date'   => $timestamp,
+            'x-amz-pay-host'   => $this->host,
+            'authorization'    => $authorizationHeader,
+        ])->post($this->endpoint, $payload);
+
+        return $response->json();
+    }
+}
