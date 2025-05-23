@@ -17,5 +17,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('checkout', [AmazonPayController::class, 'checkout'])->name('amazonpay.checkout');
-Route::get('return', [AmazonPayController::class, 'handleReturn'])->name('amazonpay.return');
+Route::get('/amazonpay/checkout', [AmazonPayController::class, 'checkout'])->name('amazonpay.checkout');
+Route::get('/amazonpay/return', [AmazonPayController::class, 'handleReturn'])->name('amazonpay.return');
