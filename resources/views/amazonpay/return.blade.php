@@ -7,6 +7,8 @@
 
     <pre>{{ print_r($params, true) }}</pre>
 
+    <pre>{!! print_r($params, true) !!}</pre>
+
     <a href="{{ url('/') }}" class="btn btn-secondary">ホームへ戻る</a>
 </div>
 @endsection

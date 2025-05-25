@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\AmazonPayService;
+use Illuminate\Support\Facades\Log;
 
 class AmazonPayController extends Controller
 {
@@ -37,6 +38,7 @@ class AmazonPayController extends Controller
         ];
 
         $response = $this->amazonPayService->createCheckoutSession($payload);
+        Log::debug('Amazon Pay response:', $response);  // ログにレスポンスを出力
 
         if (isset($response['webCheckoutDetails']['checkoutResultReturnUrl'])) {
             return redirect($response['webCheckoutDetails']['checkoutResultReturnUrl']);
