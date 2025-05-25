@@ -88,7 +88,7 @@ class AmazonPayService
             'host'   => $this->host,
             'authorization'    => $authorizationHeader,
         ])->withBody($payloadJson, 'application/json')
-            ->post($this->endpoint, $payload);
+  ->post($this->endpoint); // 第2引数なし！
 
 
 
