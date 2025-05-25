@@ -65,9 +65,17 @@ class AmazonPayService
         $response = Http::withHeaders([
             'content-type'     => 'application/json',
             'x-amz-pay-date'   => $timestamp,
-            'x-amz-pay-host'   => $this->host,
+            //'x-amz-pay-host'   => $this->host,
+            'host'   => $this->host,
             'authorization'    => $authorizationHeader,
         ])->post($this->endpoint, $payload);
+
+
+\Log::debug('Amazon Pay stringToSign:', [$stringToSign]);
+\Log::debug('Amazon Pay payload:', [$payloadJson]);
+\Log::debug('Amazon Pay signature:', [$signatureBase64]);
+\Log::debug('Amazon Pay endpoint:', [$this->endpoint]);
+
 
         return $response->json();
     }
