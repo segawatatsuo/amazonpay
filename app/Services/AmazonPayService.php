@@ -53,9 +53,12 @@ class AmazonPayService
 
 
     // ログ出力（ここで定義済みの変数を出力）
-    \Log::debug('Amazon Pay payload:', [$payload]);
-    \Log::debug('Amazon Pay payloadJson:', [$payloadJson]);
-    \Log::debug('Amazon Pay stringToSign:', [$stringToSign]);
+    //\Log::debug('Amazon Pay payload:', [$payload]);
+    \Log::debug('Amazon Pay payload:', ['payload' => $payload]);
+    //\Log::debug('Amazon Pay payloadJson:', [$payloadJson]);
+    \Log::debug('Amazon Pay payloadJson:', ['payloadJson' => $payloadJson]);
+    \Log::debug('Amazon Pay stringToSign:', ['stringToSign' => $stringToSign]);
+    //\Log::debug('Amazon Pay stringToSign:', [$stringToSign]);
 
 
         // 署名を作成
@@ -67,7 +70,8 @@ class AmazonPayService
         );
         $signatureBase64 = base64_encode($signature);
 
-        \Log::debug('Amazon Pay signature:', [$signatureBase64]);
+        //\Log::debug('Amazon Pay signature:', [$signatureBase64]);
+        \Log::debug('Amazon Pay signature:', ['signature' => $signatureBase64]);
 
         $authorizationHeader = sprintf(
             'AMZN-PAY-RSASSA-PSS PublicKeyId=%s, SignedHeaders=host;x-amz-pay-date, Signature=%s',
@@ -89,7 +93,8 @@ class AmazonPayService
         ->post($this->endpoint, $payload);
 
 
-\Log::debug('Amazon Pay response:', [$response->body()]);
+//\Log::debug('Amazon Pay response:', [$response->body()]);
+\Log::debug('Amazon Pay response:', ['body' => is_string($body) ? $body : json_encode($body)]);
 
         return $response->json();
     }
