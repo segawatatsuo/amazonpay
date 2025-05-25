@@ -51,7 +51,7 @@ class AmazonPayService
             $payloadJson
         ]);
 
-
+dd($payload, $payloadJson, $stringToSign);
         // ログ出力（ここで定義済みの変数を出力）
         \Log::debug('Amazon Pay payload:', ['payload' => $payload ?? []]);
         \Log::debug('Amazon Pay payloadJson:', ['payloadJson' => $payloadJson ?? '']);
