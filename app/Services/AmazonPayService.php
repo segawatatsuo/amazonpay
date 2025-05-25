@@ -23,12 +23,14 @@ class AmazonPayService
         $this->region       = config('amazonpay.region', 'jp');
         $this->sandbox      = config('amazonpay.sandbox', true);
         //$this->host         = 'pay-api.amazon.' . $this->region;
-        $this->host = 'sandbox.pay-api.amazon.com';
+        //$this->host = 'sandbox.pay-api.amazon.com';
+        $this->host = 'pay-api.amazon.jp';
         //$this->endpoint     = $this->sandbox
         //    ? 'https://pay-api.amazon.' . $this->region . '/sandbox/checkoutSessions'
         //    : 'https://pay-api.amazon.' . $this->region . '/checkoutSessions';
 
-        $this->endpoint = 'https://sandbox.pay-api.amazon.com/sandbox/checkoutSessions';
+        //$this->endpoint = 'https://sandbox.pay-api.amazon.com/sandbox/checkoutSessions';
+        $this->endpoint = 'https://pay-api.amazon.jp/sandbox/checkoutSessions';
         $keyPath = base_path(config('amazonpay.private_key_path'));
         $this->privateKey = file_get_contents($keyPath);
     }
