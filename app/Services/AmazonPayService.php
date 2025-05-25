@@ -51,7 +51,7 @@ class AmazonPayService
             $payloadJson
         ]);
 
-dd($payload, $payloadJson, $stringToSign);
+
         // ログ出力（ここで定義済みの変数を出力）
         \Log::debug('Amazon Pay payload:', ['payload' => $payload ?? []]);
         \Log::debug('Amazon Pay payloadJson:', ['payloadJson' => $payloadJson ?? '']);
@@ -77,6 +77,8 @@ dd($payload, $payloadJson, $stringToSign);
         );
 
         \Log::debug('Amazon Pay endpoint:', ['endpoint' => $this->endpoint ?? '']);
+
+        dd($payload, $payloadJson, $stringToSign, $signatureBase64, $this->endpoint);
 
         // API リクエスト送信
         $response = Http::withHeaders([
