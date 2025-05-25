@@ -78,7 +78,7 @@ class AmazonPayService
 
         \Log::debug('Amazon Pay endpoint:', ['endpoint' => $this->endpoint ?? '']);
 
-        dd($payload, $payloadJson, $stringToSign, $signatureBase64, $this->endpoint);
+        //dd($payload, $payloadJson, $stringToSign, $signatureBase64, $this->endpoint);
 
         // API リクエスト送信
         $response = Http::withHeaders([
