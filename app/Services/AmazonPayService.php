@@ -93,6 +93,8 @@ class AmazonPayService
 
 
 $body = $response->body() ?? '';
+dd($body);
+
 \Log::debug('Amazon Pay response:', ['body' => is_string($body) ? $body : json_encode($body)]);
 
         return $response->json();
