@@ -85,7 +85,8 @@ class AmazonPayService
             //'x-amz-pay-host'   => $this->host,
             'host'   => $this->host,
             'authorization'    => $authorizationHeader,
-        ])->post($this->endpoint, $payload);
+        ])->withBody($payloadJson, 'application/json')
+        ->post($this->endpoint, $payload);
 
 
 \Log::debug('Amazon Pay response:', [$response->body()]);
