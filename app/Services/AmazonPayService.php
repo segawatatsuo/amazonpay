@@ -33,6 +33,7 @@ class AmazonPayService
 
     public function createCheckoutSession(array $payload)
     {
+
         $method = 'POST';
         $uriPath = $this->sandbox ? '/sandbox/checkoutSessions' : '/checkoutSessions';
         $timestamp = gmdate('Ymd\THis\Z');
@@ -46,6 +47,13 @@ class AmazonPayService
             $payloadJson
         ]);
 
+
+    // ログ出力（ここで定義済みの変数を出力）
+    \Log::debug('Amazon Pay payload:', [$payload]);
+    \Log::debug('Amazon Pay payloadJson:', [$payloadJson]);
+    \Log::debug('Amazon Pay stringToSign:', [$stringToSign]);
+
+
         // 署名を作成
         openssl_sign(
             $stringToSign,
@@ -55,11 +63,16 @@ class AmazonPayService
         );
         $signatureBase64 = base64_encode($signature);
 
+        \Log::debug('Amazon Pay signature:', [$signatureBase64]);
+
         $authorizationHeader = sprintf(
             'AMZN-PAY-RSASSA-PSS PublicKeyId=%s, SignedHeaders=host;x-amz-pay-date, Signature=%s',
             $this->publicKeyId,
             $signatureBase64
         );
+
+        \Log::debug('Amazon Pay endpoint:', [$this->endpoint]);
+
 
         // API リクエスト送信
         $response = Http::withHeaders([
@@ -71,11 +84,7 @@ class AmazonPayService
         ])->post($this->endpoint, $payload);
 
 
-\Log::debug('Amazon Pay stringToSign:', [$stringToSign]);
-\Log::debug('Amazon Pay payload:', [$payloadJson]);
-\Log::debug('Amazon Pay signature:', [$signatureBase64]);
-\Log::debug('Amazon Pay endpoint:', [$this->endpoint]);
-
+\Log::debug('Amazon Pay response:', [$response->body()]);
 
         return $response->json();
     }
