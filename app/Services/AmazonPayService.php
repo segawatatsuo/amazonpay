@@ -30,7 +30,8 @@ class AmazonPayService
         //    : 'https://pay-api.amazon.' . $this->region . '/checkoutSessions';
 
         //$this->endpoint = 'https://sandbox.pay-api.amazon.com/sandbox/checkoutSessions';
-        $this->endpoint = 'https://pay-api.amazon.jp/sandbox/checkoutSessions';
+        //本番はhttps://pay-api.amazon.jp/live/v2/checkoutSessions
+        $this->endpoint = 'https://pay-api.amazon.jp/sandbox/v2/checkoutSessions';
         $keyPath = base_path(config('amazonpay.private_key_path'));
         $this->privateKey = file_get_contents($keyPath);
     }
