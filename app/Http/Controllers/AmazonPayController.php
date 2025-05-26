@@ -16,6 +16,7 @@ class AmazonPayController extends Controller
     }
 
     // 支払い開始（Checkout Session 作成）
+    /*
     public function checkout()
     {
         $payload = [
@@ -50,6 +51,41 @@ class AmazonPayController extends Controller
 
         return back()->with('error', 'Amazon Pay の開始に失敗しました。');
     }
+    */
+
+public function checkout()
+{
+    $payload = [
+        'webCheckoutDetails' => [
+            'checkoutReviewReturnUrl' => route('amazonpay.return'),
+        ],
+        'storeId' => config('amazonpay.store_id'),
+        'paymentDetails' => [
+            'paymentIntent' => 'Authorize',
+            'chargeAmount' => [
+                'amount' => '1000',
+                'currencyCode' => 'JPY',
+            ],
+        ],
+        'merchantMetadata' => [
+            'merchantReferenceId' => 'ORDER-' . uniqid(),
+            'merchantStoreName' => 'AmazonPay Sandbox TestApp',
+            'noteToBuyer' => 'ご注文ありがとうございます。',
+        ],
+    ];
+
+    $response = $this->amazonPayService->createCheckoutSession($payload);
+
+    if (isset($response['checkoutSessionId'])) {
+        return view('amazonpay.button', [
+            'checkoutSessionId' => $response['checkoutSessionId'],
+        ]);
+    }
+
+    return back()->with('error', 'Amazon Pay セッション作成に失敗しました。');
+}
+
+
 
     // 戻りURL処理（サンドボックス用）
     public function handleReturn(Request $request)
