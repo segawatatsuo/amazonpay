@@ -88,14 +88,14 @@ class AmazonPayService
             'host'   => $this->host,
             'authorization'    => $authorizationHeader,
         ])->withBody($payloadJson, 'application/json')
-  ->post($this->endpoint); // 第2引数なし！
+            ->post($this->endpoint); // 第2引数なし！
 
 
 
-$body = $response->body() ?? '';
-dd($body);
+        $body = $response->body() ?? '';
+        //dd($body);
 
-\Log::debug('Amazon Pay response:', ['body' => is_string($body) ? $body : json_encode($body)]);
+        \Log::debug('Amazon Pay response:', ['body' => is_string($body) ? $body : json_encode($body)]);
 
         return $response->json();
     }
