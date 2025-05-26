@@ -43,12 +43,16 @@ class AmazonPayService
         $timestamp = gmdate('Ymd\THis\Z');
 
         $payloadJson = json_encode($payload, JSON_UNESCAPED_SLASHES);
+        // ★★★ 変更点: payloadJson のSHA256ハッシュを計算し、小文字の16進数表現にする
+        $payloadHash = hash('sha256', $payloadJson);
+
         $stringToSign = implode("\n", [
             $method,
             $uriPath,
             $this->host,
             $timestamp,
-            $payloadJson
+            //$payloadJson
+            $payloadHash // ★ ここをハッシュ値に変更
         ]);
 
 
