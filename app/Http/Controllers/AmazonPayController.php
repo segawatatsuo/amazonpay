@@ -57,8 +57,10 @@ public function checkout()
 {
     $payload = [
         'webCheckoutDetails' => [
-            'checkoutReviewReturnUrl' => route('amazonpay.return'),
+            'checkoutResultReturnUrl' => route('amazonpay.return'),//(必須): 決済結果（成功/失敗）のページへリダイレクトするためのURL。
+            'checkoutReviewReturnUrl' => route('amazonpay.return'),// (必須): 購入者がCheckout Reviewページから戻ってくるURL。
         ],
+        'chargePermissionType'=>'OneTime', 
         'storeId' => config('amazonpay.store_id'),
         'paymentDetails' => [
             'paymentIntent' => 'Authorize',
